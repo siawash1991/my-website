@@ -1,0 +1,115 @@
+عالیه! برای اینکه بتونی این سایت رو با Replit بسازی، یک TODO list پرامپت‌گونه کامل برات آماده می‌کنم:
+
+---
+
+## 🎯 Website Development TODO List - AI Consultant Personal Website
+
+**Project Goal:** Create a bilingual (English/Persian) personal website with modern design, smooth animations, and multiple content sections.
+
+### Core Requirements:
+
+**1. TECHNICAL SETUP**
+- Build a responsive single-page application using HTML, CSS, and JavaScript
+- Implement smooth scrolling navigation
+- Create a language toggle system (English ⟷ Persian/Farsi)
+- Ensure mobile-first responsive design
+- Use modern CSS (Flexbox/Grid) for layouts
+- Add loading animations and page transitions
+
+**2. DESIGN REQUIREMENTS**
+- Modern, clean, and professional aesthetic
+- Dark/Light mode toggle option
+- Smooth animations and micro-interactions
+- High-quality graphics and visual hierarchy
+- Consistent color scheme (suggest AI/tech theme: blues, purples, gradients)
+- Professional typography (support for both English and Persian fonts)
+- Icon library integration (Font Awesome or similar)
+
+**3. WEBSITE SECTIONS TO BUILD**
+
+**A) Hero/Landing Section:**
+- Eye-catching header with animated background
+- Professional headline introducing yourself as an AI consultant
+- Tagline about AI content creation and business implementation
+- Call-to-action buttons
+- Language switcher prominent in header
+
+**B) About/Introduction Section (معرفی):**
+- Professional photo/avatar
+- Brief bio about your expertise in AI
+- Your background and experience
+- Skills showcase with visual elements
+- Social media links
+
+**C) AI Blog Section (بلاگ هوش مصنوعی):**
+- Grid/card layout for blog posts
+- Each card should include: title, excerpt, date, read time, thumbnail
+- Categories/tags for blog posts
+- "Read More" functionality
+- Bilingual content support
+- Search/filter functionality
+
+**D) Podcasts Section (پادکست‌ها):**
+- Audio player integration or embed links
+- Podcast episode cards with: title, description, duration, date
+- Platform links (Spotify, Apple Podcasts, etc.)
+- Visual podcast cover art
+
+**E) Ideas Section (ایده‌ها):**
+- Creative showcase of your AI implementation ideas
+- Card/tile layout with hover effects
+- Each idea card: title, brief description, potential impact
+- Visual icons or illustrations for each idea
+
+**F) "Buy Me a Coffee" Consultation Section (منو به قهوه دعوت کن):**
+- Engaging call-to-action
+- Description of consultation services: "AI consulting for content creation and business/industry implementation"
+- Service offerings list
+- Integration with Buy Me a Coffee button/link
+- Contact form or scheduling calendar integration (Calendly)
+- Pricing or consultation packages (optional)
+
+**4. ADDITIONAL FEATURES**
+- Smooth scroll-to-section navigation
+- Animated counter statistics (if applicable)
+- Testimonials section (optional)
+- Newsletter subscription form
+- Contact information footer
+- Privacy policy and terms (if needed)
+- SEO meta tags for both languages
+- Loading spinner/skeleton screens
+- Error handling for forms
+
+**5. CONTENT TO PREPARE (BILINGUAL)**
+- All text content in both English and Persian
+- Blog post examples (3-5 posts minimum)
+- Podcast episodes information
+- AI ideas/concepts to showcase
+- Professional photos/graphics
+- Logo or personal branding
+
+**6. TECHNICAL IMPLEMENTATION**
+- Create JSON file for bilingual content storage
+- JavaScript for language switching functionality
+- CSS animations for smooth UX
+- Form validation and submission handling
+- Responsive breakpoints for mobile, tablet, desktop
+- Cross-browser compatibility
+
+**7. DEPLOYMENT & OPTIMIZATION**
+- Test on multiple devices and browsers
+- Optimize images for web performance
+- Minify CSS/JavaScript
+- Add meta tags for social media sharing
+- Deploy on Replit
+- Custom domain setup (optional)
+
+---
+
+### 📝 Prompt for Development:
+
+*"Create a modern, bilingual (English/Farsi) personal website for an AI consultant with these sections: 1) Hero section with animated background, 2) About/Introduction, 3) AI Blog with card layout, 4) Podcasts section with audio players, 5) Ideas showcase, 6) 'Buy Me a Coffee' consultation CTA for AI consulting services (content creation to business implementation). Design should be sleek, professional, with smooth animations, dark/light mode toggle, mobile-responsive, and easy language switching. Use modern CSS, vanilla JavaScript, and include a navigation menu that smoothly scrolls to each section. All content should be stored in a JSON structure for easy bilingual management."*
+
+---
+
+آماده‌ای که شروع کنی؟ میتونم کد کامل سایت رو برات بنویسم! 🚀
