@@ -5,8 +5,9 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PostFormDialog } from "@/components/admin/PostFormDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,6 +22,8 @@ import {
 export default function AdminPosts() {
   const { toast } = useToast();
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingPost, setEditingPost] = useState<Post | null>(null);
   
   const { data: posts = [], isLoading } = useQuery<Post[]>({
     queryKey: ["/api/posts"],
@@ -62,7 +65,13 @@ export default function AdminPosts() {
           <h1 className="text-3xl font-bold">Posts Management</h1>
           <p className="text-muted-foreground">Manage your blog posts</p>
         </div>
-        <Button data-testid="button-add-post">
+        <Button
+          onClick={() => {
+            setEditingPost(null);
+            setDialogOpen(true);
+          }}
+          data-testid="button-add-post"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Post
         </Button>
@@ -82,7 +91,15 @@ export default function AdminPosts() {
                   <p className="text-sm text-muted-foreground mt-1">{post.titleFa}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" data-testid={`button-edit-${post.id}`}>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                      setEditingPost(post);
+                      setDialogOpen(true);
+                    }}
+                    data-testid={`button-edit-${post.id}`}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
@@ -98,6 +115,17 @@ export default function AdminPosts() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground line-clamp-2">{post.excerptEn}</p>
+              {post.articleUrl && (
+                <a
+                  href={post.articleUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                  View Article
+                </a>
+              )}
             </CardContent>
           </Card>
         ))}
@@ -108,6 +136,15 @@ export default function AdminPosts() {
           <p className="text-muted-foreground">No posts yet. Create your first post!</p>
         </div>
       )}
+
+      <PostFormDialog
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setEditingPost(null);
+        }}
+        post={editingPost}
+      />
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>

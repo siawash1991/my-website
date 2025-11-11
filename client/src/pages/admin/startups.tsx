@@ -5,8 +5,9 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { StartupFormDialog } from "@/components/admin/StartupFormDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +22,9 @@ import {
 export default function AdminStartups() {
   const { toast } = useToast();
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingStartup, setEditingStartup] = useState<Startup | null>(null);
+
   const { data: startups = [], isLoading } = useQuery<Startup[]>({
     queryKey: ["/api/startups"],
   });
@@ -62,7 +65,13 @@ export default function AdminStartups() {
           <h1 className="text-3xl font-bold">Startups Management</h1>
           <p className="text-muted-foreground">Manage your startup projects</p>
         </div>
-        <Button data-testid="button-add-startup">
+        <Button
+          onClick={() => {
+            setEditingStartup(null);
+            setDialogOpen(true);
+          }}
+          data-testid="button-add-startup"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Startup
         </Button>
@@ -82,7 +91,15 @@ export default function AdminStartups() {
                   <p className="text-sm text-muted-foreground mt-1">{startup.nameFa}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" data-testid={`button-edit-${startup.id}`}>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                      setEditingStartup(startup);
+                      setDialogOpen(true);
+                    }}
+                    data-testid={`button-edit-${startup.id}`}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
@@ -98,6 +115,30 @@ export default function AdminStartups() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground line-clamp-2">{startup.descriptionEn}</p>
+              <div className="flex gap-3 mt-3">
+                {startup.websiteUrl && (
+                  <a
+                    href={startup.websiteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    Website
+                  </a>
+                )}
+                {startup.articleUrl && (
+                  <a
+                    href={startup.articleUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    Article
+                  </a>
+                )}
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -105,9 +146,18 @@ export default function AdminStartups() {
 
       {startups.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No startups yet. Create your first project!</p>
+          <p className="text-muted-foreground">No startups yet. Create your first startup!</p>
         </div>
       )}
+
+      <StartupFormDialog
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setEditingStartup(null);
+        }}
+        startup={editingStartup}
+      />
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
