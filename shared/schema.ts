@@ -66,18 +66,26 @@ export const insertPostSchema = createInsertSchema(posts).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  articleUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
 });
 
 export const insertPodcastSchema = createInsertSchema(podcasts).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  audioUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  youtubeUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
 });
 
 export const insertStartupSchema = createInsertSchema(startups).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  websiteUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  articleUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
