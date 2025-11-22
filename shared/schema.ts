@@ -62,12 +62,18 @@ export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
 });
 
+// Helper for optional URL fields - accepts empty string or valid URL
+const optionalUrl = z.union([
+  z.string().url(),
+  z.literal("")
+]).transform(val => val === "" ? null : val).nullable().optional();
+
 export const insertPostSchema = createInsertSchema(posts).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 }).extend({
-  articleUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  articleUrl: optionalUrl,
 });
 
 export const insertPodcastSchema = createInsertSchema(podcasts).omit({
@@ -75,8 +81,8 @@ export const insertPodcastSchema = createInsertSchema(podcasts).omit({
   createdAt: true,
   updatedAt: true,
 }).extend({
-  audioUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
-  youtubeUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  audioUrl: optionalUrl,
+  youtubeUrl: optionalUrl,
 });
 
 export const insertStartupSchema = createInsertSchema(startups).omit({
@@ -84,8 +90,8 @@ export const insertStartupSchema = createInsertSchema(startups).omit({
   createdAt: true,
   updatedAt: true,
 }).extend({
-  websiteUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
-  articleUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  websiteUrl: optionalUrl,
+  articleUrl: optionalUrl,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;
