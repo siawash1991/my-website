@@ -5,8 +5,9 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit, Trash2, Loader2 } from "lucide-react";
+import { Plus, Edit, Trash2, Loader2, Music, Youtube } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PodcastFormDialog } from "@/components/admin/PodcastFormDialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,7 +22,9 @@ import {
 export default function AdminPodcasts() {
   const { toast } = useToast();
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingPodcast, setEditingPodcast] = useState<Podcast | null>(null);
+
   const { data: podcasts = [], isLoading } = useQuery<Podcast[]>({
     queryKey: ["/api/podcasts"],
   });
@@ -62,7 +65,13 @@ export default function AdminPodcasts() {
           <h1 className="text-3xl font-bold">Podcasts Management</h1>
           <p className="text-muted-foreground">Manage your podcast episodes</p>
         </div>
-        <Button data-testid="button-add-podcast">
+        <Button
+          onClick={() => {
+            setEditingPodcast(null);
+            setDialogOpen(true);
+          }}
+          data-testid="button-add-podcast"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Podcast
         </Button>
@@ -82,7 +91,15 @@ export default function AdminPodcasts() {
                   <p className="text-sm text-muted-foreground mt-1">{podcast.titleFa}</p>
                 </div>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" data-testid={`button-edit-${podcast.id}`}>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                      setEditingPodcast(podcast);
+                      setDialogOpen(true);
+                    }}
+                    data-testid={`button-edit-${podcast.id}`}
+                  >
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
@@ -98,6 +115,30 @@ export default function AdminPodcasts() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted-foreground line-clamp-2">{podcast.descriptionEn}</p>
+              <div className="flex gap-3 mt-3">
+                {podcast.audioUrl && (
+                  <a
+                    href={podcast.audioUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    <Music className="h-3 w-3" />
+                    Audio
+                  </a>
+                )}
+                {podcast.youtubeUrl && (
+                  <a
+                    href={podcast.youtubeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                  >
+                    <Youtube className="h-3 w-3" />
+                    YouTube
+                  </a>
+                )}
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -105,16 +146,25 @@ export default function AdminPodcasts() {
 
       {podcasts.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">No podcasts yet. Create your first episode!</p>
+          <p className="text-muted-foreground">No podcasts yet. Create your first podcast!</p>
         </div>
       )}
+
+      <PodcastFormDialog
+        open={dialogOpen}
+        onOpenChange={(open) => {
+          setDialogOpen(open);
+          if (!open) setEditingPodcast(null);
+        }}
+        podcast={editingPodcast}
+      />
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the podcast episode.
+              This action cannot be undone. This will permanently delete the podcast.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

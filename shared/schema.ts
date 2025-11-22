@@ -22,6 +22,7 @@ export const posts = pgTable("posts", {
   readTime: integer("read_time").notNull(),
   date: text("date").notNull(),
   thumbnail: text("thumbnail").notNull(),
+  articleUrl: text("article_url"), // لینک به مقاله کامل
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -34,7 +35,8 @@ export const podcasts = pgTable("podcasts", {
   descriptionFa: text("description_fa").notNull(),
   duration: text("duration").notNull(),
   date: text("date").notNull(),
-  audioUrl: text("audio_url"),
+  audioUrl: text("audio_url"), // لینک پادکست صوتی
+  youtubeUrl: text("youtube_url"), // لینک ویدیو یوتوب
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -50,7 +52,8 @@ export const startups = pgTable("startups", {
   categoryEn: text("category_en").notNull(),
   categoryFa: text("category_fa").notNull(),
   thumbnail: text("thumbnail").notNull(),
-  websiteUrl: text("website_url"),
+  websiteUrl: text("website_url"), // لینک وبسایت استارتاپ
+  articleUrl: text("article_url"), // لینک مقاله درباره استارتاپ
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -63,18 +66,26 @@ export const insertPostSchema = createInsertSchema(posts).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  articleUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
 });
 
 export const insertPodcastSchema = createInsertSchema(podcasts).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  audioUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  youtubeUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
 });
 
 export const insertStartupSchema = createInsertSchema(startups).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
+}).extend({
+  websiteUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
+  articleUrl: z.string().url().optional().or(z.literal("")).transform(val => val === "" ? null : val),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

@@ -1,9 +1,31 @@
 import { db } from "./db";
-import { posts, podcasts, startups } from "@shared/schema";
+import { posts, podcasts, startups, users } from "@shared/schema";
 import { content } from "@shared/content";
+import { scrypt, randomBytes } from "crypto";
+import { promisify } from "util";
+
+const scryptAsync = promisify(scrypt);
+
+async function hashPassword(password: string) {
+  const salt = randomBytes(16).toString("hex");
+  const buf = (await scryptAsync(password, salt, 64)) as Buffer;
+  return `${buf.toString("hex")}.${salt}`;
+}
 
 async function seed() {
   console.log("Seeding database with initial content...");
+
+  // Create admin user
+  try {
+    const hashedPassword = await hashPassword("admin123");
+    await db.insert(users).values({
+      username: "admin",
+      password: hashedPassword,
+    }).onConflictDoNothing();
+    console.log("✓ Admin user created (username: admin, password: admin123)");
+  } catch (error) {
+    console.log("Note: Admin user may already exist");
+  }
 
   // Seed posts
   const postsEn = content.en.blog.posts;
